@@ -1,0 +1,73 @@
+<div class="form-wrapper">
+  <h1>Registration</h1>
+  <form
+    #formDirective="ngForm"
+    [formGroup]="registrationForm"
+    (ngSubmit)="onSubmit(registrationForm.value)"
+    class="form"
+  >
+    <div class="form__item">
+      <mat-form-field>
+        <input matInput
+          placeholder="First Name"
+          formControlName="firstName"
+        >
+        <mat-error>Name not look good</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form__item">
+      <mat-form-field>
+        <input matInput
+          placeholder="Last Name"
+          formControlName="lastName"
+        >
+        <mat-error>Last Name not look good</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form__item">
+      <mat-form-field>
+        <input matInput
+          placeholder="Email"
+          formControlName="email"
+        >
+        <mat-error>Email not look good</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form__item" formGroupName="passwordForm">
+      <div class="form">
+        <div class="form__item form__item--half">
+          <mat-form-field>
+            <input matInput
+              type="password"
+              placeholder="Password"
+              formControlName="password"
+            >
+            <mat-error>Password should contain not less 6 characters</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form__item form__item--half">
+          <mat-form-field>
+            <input matInput
+              type="password"
+              placeholder="Confirm password"
+              formControlName="passwordConfirm"
+            >
+            <mat-error>Password should contain not less 6 characters</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="isPasswordDifferent" class="not-confirmed-password-alert">
+        Confirmed password not the same
+      </div>
+    </div>
+    <div class="form__item">
+      <button mat-raised-button class="btn-with-loader"
+        type="submit"
+        color="primary"
+        [disabled]="registrationForm.invalid || sendingRequest"
+      >Submit
+        <mat-spinner *ngIf="sendingRequest" [diameter]="25"></mat-spinner>
+      </button>
+    </div>
+  </form>
+</div>

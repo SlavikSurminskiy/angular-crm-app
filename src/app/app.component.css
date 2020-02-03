@@ -1,15 +1,11 @@
-@import '../smart-grid';
-
 mat-sidenav-container,
 mat-sidenav-content,
 mat-sidenav {
   height: 100%;
 }
-
 mat-sidenav {
   width: 250px;
 }
-
 main {
-  @include wrapper();
+  padding: 0 25px;
 }
