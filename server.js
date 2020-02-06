@@ -7,6 +7,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,7 +32,7 @@ db.once('open', () => console.log('DB CONNECTED'));
 
 const Users = require('./server/Schemas/User');
 
-app.post("/api/registration", (req, res) => {
+app.post('/api/registration', (req, res) => {
   const {
     firstName,
     lastName,
@@ -56,3 +57,44 @@ app.post("/api/registration", (req, res) => {
   })
 });
 
+function verifyToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader.split(' ')[1];
+  if(token) {
+    const secretKey = process.env.WEB_TOKEN_KEY;
+    jwt.verify(token, secretKey, (err, data) => {
+      if(err) {
+        res.send({isTokenValid: false})
+      } else {
+        next()
+      }
+    })
+  } else {
+    res.send({isTokenValid: false})
+  }
+}
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  Users.findOne({email}).then(user => {
+    if(user) {
+      bcrypt.compare(password, user.password)
+      .then(isPasswordCorrect => {
+        if(isPasswordCorrect) {
+          const secretKey = process.env.WEB_TOKEN_KEY;
+          jwt.sign({userEmail: user.email}, secretKey, { expiresIn: '1h' }, (err, token) => {
+            res.send({message: 'Login success', token, loginSuccess: true})
+          })
+        } else {
+          res.send({message: 'Wrong password, please try again', loginSuccess: false})
+        }
+      });
+    } else {
+      res.send({message: 'User with this email not found', loginSuccess: false})
+    }
+  })
+})
+
+app.post('/api/verifytoken', verifyToken, (req, res) => {
+  res.send({isTokenValid: true})
+})
