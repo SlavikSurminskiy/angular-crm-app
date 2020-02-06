@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../models/NewUser';
-import { RegistrationService } from '../services/registration.service';
+import { User } from '../../models/NewUser';
+import { RegistrationService } from '../../services/registration.service';
 
 interface FormData {
   firsName: string;

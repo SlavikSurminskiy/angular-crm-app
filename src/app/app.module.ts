@@ -6,16 +6,24 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { RegistrationComponent } from './registration/registration.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
+import { HomeComponent } from './pages/home/home.component';
+
+import { TokenInterceptor } from './auth/token.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    LoginComponent,
+    LogoutComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +33,13 @@ import { RegistrationComponent } from './registration/registration.component';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
