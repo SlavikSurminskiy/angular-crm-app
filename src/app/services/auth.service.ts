@@ -1,3 +1,4 @@
+import { User } from './../models/NewUser';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
@@ -35,6 +36,7 @@ export class AuthService {
         if (res.token) {
           this.isLogin$.next(true);
           localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
         }
       })
     );
@@ -43,6 +45,7 @@ export class AuthService {
   logOut() {
     this.isLogin$.next(false);
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
 }

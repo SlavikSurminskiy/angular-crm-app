@@ -10,6 +10,15 @@ mat-sidenav {
   width: 250px;
 }
 
+mat-toolbar {
+  justify-content: space-between;
+}
+
 main {
   @include wrapper();
+}
+
+.menu-btn-wrapper {
+  display: flex;
+  align-items: center;
 }

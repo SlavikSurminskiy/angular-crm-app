@@ -83,7 +83,16 @@ app.post('/api/login', (req, res) => {
         if(isPasswordCorrect) {
           const secretKey = process.env.WEB_TOKEN_KEY;
           jwt.sign({userEmail: user.email}, secretKey, { expiresIn: '1h' }, (err, token) => {
-            res.send({message: 'Login success', token, loginSuccess: true})
+            res.send({
+              loginSuccess: true,
+              message: 'Login success',
+              token,
+              user: {
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+              },
+            })
           })
         } else {
           res.send({message: 'Wrong password, please try again', loginSuccess: false})

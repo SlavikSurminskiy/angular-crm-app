@@ -15,4 +15,13 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.authService.verifyToken();
   }
+
+  get userName() {
+    const isUserLogin = this.authService.isLogin$.value && JSON.parse(localStorage.getItem('user'));
+    if (isUserLogin) {
+      return isUserLogin.firstName;
+    }
+    return '';
+  }
+
 }

@@ -4,10 +4,15 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()" >
-        <mat-icon>menu</mat-icon>
-      </button>
-      Angular App
+      <div class="menu-btn-wrapper">
+        <button mat-icon-button (click)="sidenav.toggle()" >
+          <mat-icon>menu</mat-icon>
+        </button>
+        Angular App
+      </div>
+      <div>
+        {{userName}}
+      </div>
     </mat-toolbar>
     <main>
       <router-outlet></router-outlet>
