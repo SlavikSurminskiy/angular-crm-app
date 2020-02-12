@@ -31,6 +31,7 @@ db.once('open', () => console.log('DB CONNECTED'));
 
 
 const Users = require('./server/Schemas/User');
+const Category = require('./server/Schemas/Category');
 
 app.post('/api/registration', (req, res) => {
   const {
@@ -109,4 +110,19 @@ app.post('/api/login', (req, res) => {
 
 app.get('/api/verifytoken', verifyToken, (req, res) => {
   res.sendStatus(201);
+})
+
+app.post('/api/createCategory', verifyToken, (req, res) => {
+  const { categoryName, categoryLimit } = req.body;
+
+  Category.findOne({categoryName}).then(categoryExist => {
+    if(!categoryExist) {
+      const category = new Category({ categoryName, categoryLimit });
+      category.save().then(() => {
+        res.send({message: 'Category was saved', isSaved: true});
+      });
+    } else {
+      res.send({message: 'Category already exist', isSaved: false});
+    }
+  })
 })
