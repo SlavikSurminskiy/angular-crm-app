@@ -1,14 +1,9 @@
-import { User } from './../models/NewUser';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { UserLoginData } from '../models/NewUser';
-
-interface TokenStatus {
-  isTokenValid: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +16,10 @@ export class AuthService {
   verifyToken() {
     const token = localStorage.getItem('token');
     if (token) {
-      this.http.post('/api/verifytoken', {})
-      .subscribe((res: TokenStatus) => {
-        if (res.isTokenValid) {
+      this.http.get('/api/verifytoken', {observe: 'response'})
+      .subscribe(res => {
+        const isTokenValid = res.headers.get('token-valid') === 'true';
+        if (isTokenValid) {
           this.isLogin$.next(true);
         }
       });

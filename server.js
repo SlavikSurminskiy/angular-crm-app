@@ -109,7 +109,8 @@ app.post('/api/login', (req, res) => {
 })
 
 app.get('/api/verifytoken', verifyToken, (req, res) => {
-  res.sendStatus(201);
+  res.status(201);
+  res.send();
 })
 
 app.post('/api/createCategory', verifyToken, (req, res) => {
