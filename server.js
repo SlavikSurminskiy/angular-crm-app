@@ -64,13 +64,16 @@ function verifyToken(req, res, next) {
     const secretKey = process.env.WEB_TOKEN_KEY;
     jwt.verify(token, secretKey, (err, data) => {
       if(err) {
-        res.send({isTokenValid: false})
+        res.set('token-valid', false);
+        res.sendStatus(401);
       } else {
-        next()
+        res.set('token-valid', true);
+        next();
       }
     })
   } else {
-    res.send({isTokenValid: false})
+    res.set('token-valid', false);
+    res.sendStatus(401);
   }
 }
 
@@ -104,6 +107,6 @@ app.post('/api/login', (req, res) => {
   })
 })
 
-app.post('/api/verifytoken', verifyToken, (req, res) => {
-  res.send({isTokenValid: true})
+app.get('/api/verifytoken', verifyToken, (req, res) => {
+  res.sendStatus(201);
 })
