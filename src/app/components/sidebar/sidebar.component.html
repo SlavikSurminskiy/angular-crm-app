@@ -11,13 +11,19 @@
     </button>
     Registration
   </mat-list-item>
-  <mat-list-item *ngIf="(authService.isLogin$ | async) === false; else logOutBtn" routerLink="/login">
+  <mat-list-item *ngIf="(authService.isLogin$ | async) === false; else logined" routerLink="/login">
     <button mat-icon-button>
       <mat-icon>exit_to_app</mat-icon>
     </button>
     LogIn
   </mat-list-item>
-  <ng-template #logOutBtn>
+  <ng-template #logined>
+    <mat-list-item  routerLink="/categories">
+      <button mat-icon-button>
+        <mat-icon>library_books</mat-icon>
+      </button>
+      Categories
+    </mat-list-item>
     <mat-list-item  routerLink="/logout">
       <button mat-icon-button>
         <mat-icon>power_settings_new</mat-icon>

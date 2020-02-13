@@ -15,6 +15,8 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { HomeComponent } from './pages/home/home.component';
 
 import { TokenInterceptor } from './auth/token.interceptor';
+import { CategoriesComponent } from './pages/categories/categories.component';
+import { CreateCategoryComponent } from './components/create-category/create-category.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { TokenInterceptor } from './auth/token.interceptor';
     RegistrationComponent,
     LoginComponent,
     LogoutComponent,
-    HomeComponent
+    HomeComponent,
+    CategoriesComponent,
+    CreateCategoryComponent,
   ],
   imports: [
     BrowserModule,

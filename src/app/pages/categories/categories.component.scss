@@ -1,0 +1,10 @@
+@import '../../../smart-grid';
+
+.categories {
+  @include row-flex();
+
+  &__action {
+    @include col();
+    @include size(6);
+  }
+}

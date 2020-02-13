@@ -1,0 +1,35 @@
+<form
+  #formDirective="ngForm"
+  [formGroup]="createCategoryForm"
+  (ngSubmit)="onSubmit(createCategoryForm.value)"
+>
+  <div class="form__item">
+    <mat-form-field>
+      <input matInput
+        placeholder="Category name"
+        formControlName="categoryName"
+      >
+      <mat-error>Name not look good</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form__item">
+    <mat-form-field>
+      <span matPrefix>&#36; &nbsp;</span>
+      <input matInput
+        placeholder="Category limit"
+        formControlName="categoryLimit"
+        type="number"
+      >
+      <mat-error>Should be positive number</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="form__item">
+    <button mat-raised-button class="btn-with-loader"
+      type="submit"
+      color="primary"
+      [disabled]="createCategoryForm.invalid || sendingRequest"
+    >Create
+      <mat-spinner *ngIf="sendingRequest" [diameter]="25"></mat-spinner>
+    </button>
+  </div>
+</form>
