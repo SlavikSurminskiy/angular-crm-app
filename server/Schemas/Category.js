@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const categorySchema = new mongoose.Schema({
-  categoryName: String,
-  categoryLimit: Number,
+  name: String,
+  limit: Number,
 });
 
 const Category = mongoose.model('Category', categorySchema);

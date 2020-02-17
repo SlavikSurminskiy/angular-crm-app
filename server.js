@@ -22,7 +22,8 @@ http.listen(PORT, () => {
 const DB_URL = process.env.MONGOBD_URL;
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -114,16 +115,47 @@ app.get('/api/verifytoken', verifyToken, (req, res) => {
 })
 
 app.post('/api/createCategory', verifyToken, (req, res) => {
-  const { categoryName, categoryLimit } = req.body;
+  const { name, limit } = req.body;
 
-  Category.findOne({categoryName}).then(categoryExist => {
+  Category.findOne({name}).then(categoryExist => {
     if(!categoryExist) {
-      const category = new Category({ categoryName, categoryLimit });
-      category.save().then(() => {
-        res.send({message: 'Category was saved', isSaved: true});
+      const category = new Category({ name, limit });
+      category.save().then((savedCategory) => {
+        res.send({
+          message: 'Category was saved',
+          isSaved: true,
+          savedCategory: savedCategory.toObject({versionKey: false})
+        });
       });
     } else {
       res.send({message: 'Category already exist', isSaved: false});
     }
   })
+})
+
+app.get('/api/categories', verifyToken, (req, res) => {
+  Category.find({}).select('-__v').then(categories => {
+    res.send(categories);
+  })
+})
+
+app.post('/api/updateCategory', verifyToken, async (req, res) => {
+  const { name, limit, selectedCategory: id } = req.body;
+  Category.findOne({name, _id: {$ne: id}}).then(categoryExist => {
+    if(categoryExist) {
+      res.send({
+        message: 'Category with this name already exist',
+        isUpdated: false,
+      })
+    } else {
+      Category.findByIdAndUpdate(id, {name, limit}, {new: true}).then(updatedCategory => {
+        res.send({
+          message: 'Category was updated',
+          isUpdated: true,
+          updatedCategory: updatedCategory.toObject({versionKey: false})
+        })
+      })
+    }
+  });
+
 })
