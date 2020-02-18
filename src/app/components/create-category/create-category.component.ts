@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { FormGroup, FormBuilder, Validators, NgForm} from '@angular/forms';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs/operators';
-
 import { Category } from './../../models/NewCategory';
+import { CategoriesService } from './../../services/categories.service';
+import { Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 
 interface CategoryResponse {
   message: string;
@@ -16,17 +16,18 @@ interface CategoryResponse {
   templateUrl: './create-category.component.html',
   styleUrls: ['./create-category.component.scss']
 })
-export class CreateCategoryComponent implements OnInit {
+export class CreateCategoryComponent implements OnInit, OnDestroy {
   createCategoryForm: FormGroup;
   sendingRequest = false;
+  private ngUnsubscribe = new Subject();
 
   @ViewChild('formDirective', {static: false})
   private formDirective: NgForm;
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private categoriesService: CategoriesService
   ) { }
 
   ngOnInit() {
@@ -35,12 +36,12 @@ export class CreateCategoryComponent implements OnInit {
 
   initForm() {
     this.createCategoryForm = this.fb.group({
-      categoryName: ['', [
+      name: ['', [
         Validators.required,
         Validators.minLength(2)
        ]
       ],
-      categoryLimit: ['', [
+      limit: ['', [
         Validators.required,
         Validators.min(1)
        ]
@@ -50,8 +51,9 @@ export class CreateCategoryComponent implements OnInit {
 
   onSubmit(formData: Category) {
     this.sendingRequest = true;
-    this.http.post('/api/createCategory', formData).pipe(
-      finalize(() => this.sendingRequest = false)
+    this.categoriesService.createCategory(formData).pipe(
+      finalize(() => this.sendingRequest = false),
+      takeUntil(this.ngUnsubscribe)
     ).subscribe((res: CategoryResponse) => {
       const { message, isSaved } = res;
 
@@ -66,6 +68,11 @@ export class CreateCategoryComponent implements OnInit {
         this.formDirective.resetForm();
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
 }

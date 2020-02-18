@@ -17,6 +17,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { TokenInterceptor } from './auth/token.interceptor';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CreateCategoryComponent } from './components/create-category/create-cat
     HomeComponent,
     CategoriesComponent,
     CreateCategoryComponent,
+    EditCategoryComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,49 @@
+<h3 *ngIf="(categoriesService.categories$ | async)?.length === 0; else edit">No categories yet</h3>
+<ng-template #edit>
+  <form
+    [formGroup]="editCategoryForm"
+    (ngSubmit)="onSubmit(editCategoryForm.value)"
+  >
+    <div class="form__item">
+      <mat-form-field>
+        <mat-label>Select category</mat-label>
+        <mat-select
+          formControlName="selectedCategory"
+          (selectionChange)="changeCategory($event.value)">
+          <mat-option *ngFor="let category of categoriesService.categories$ | async" [value]="category._id">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="form__item">
+      <mat-form-field>
+        <input matInput
+          formControlName="name"
+          placeholder="Category name"
+        >
+        <mat-error>Name not look good</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form__item">
+      <mat-form-field>
+        <span matPrefix>&#36; &nbsp;</span>
+        <input matInput
+          formControlName="limit"
+          placeholder="Category limit"
+          type="number"
+        >
+        <mat-error>Should be positive number</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form__item">
+      <button mat-raised-button class="btn-with-loader"
+        type="submit"
+        color="primary"
+        [disabled]="editCategoryForm.invalid || sendingRequest"
+      >Save changes
+        <mat-spinner *ngIf="sendingRequest" [diameter]="25"></mat-spinner>
+      </button>
+    </div>
+  </form>
+</ng-template>
