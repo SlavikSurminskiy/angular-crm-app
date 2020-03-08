@@ -18,6 +18,7 @@ import { TokenInterceptor } from './auth/token.interceptor';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { CreateCategoryComponent } from './components/create-category/create-category.component';
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
+import { RedirectPopupComponent } from './components/redirect-popup/redirect-popup.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
     CategoriesComponent,
     CreateCategoryComponent,
     EditCategoryComponent,
+    RedirectPopupComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,7 @@ import { EditCategoryComponent } from './components/edit-category/edit-category.
       multi: true
     }
   ],
+  entryComponents: [RedirectPopupComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
